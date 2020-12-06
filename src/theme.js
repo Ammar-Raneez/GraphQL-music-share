@@ -4,8 +4,8 @@ import { createMuiTheme } from '@material-ui/core/styles'
 const theme = createMuiTheme({
     palette: {
         type: "dark",
-        primary: purple,
-        secondary: deepOrange
+        primary: deepOrange,
+        secondary: purple
     }
 })
 
