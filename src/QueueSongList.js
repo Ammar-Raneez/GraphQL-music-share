@@ -1,15 +1,17 @@
-import { Avatar, IconButton, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, IconButton, makeStyles, Typography, useMediaQuery } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import React from 'react'
 
 function QueueSongList() {
+    const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up('md'))
+
     const song = {
         title: 'LUNE',
         artist: 'MOON',
         thumbnail: 'http://img.youtube.com/vi/--ZtUFsIgMk/0.jpg'
     }
 
-    return (
+    return greaterThanMd && (
         <div style={{ margin: '10px 0' }}>
             <Typography color="textSecondary" variant="button">
                 QUEUE (5)
