@@ -28,6 +28,12 @@ function AddSong() {
     const classes = useStyles();
     const [url, setUrl] = useState("");
     const [playable, setPlayable] = useState(false);
+    const [song, setSong] = useState({
+        duration: 0,
+        title: "",
+        artist: "",
+        thumbnail: ""
+    })
 
     useEffect(() => {
         //only valid urls will work
@@ -39,15 +45,53 @@ function AddSong() {
         setDialog(false);
     }
 
+    async function handleEditSong({ player }) {
+        const nestedPlayer = player.player.player;
+        let songData;
+        if(nestedPlayer.getVideoData) {
+            songData = getYoutubeInfo(nestedPlayer);
+        } else if(nestedPlayer.getCurrentSound) {
+            songData = await getSoundcloudInfo(nestedPlayer);
+        }
+        setSong({ ...songData, url })
+    }
+
+    function getYoutubeInfo(player) {
+        const duration = player.getDuration();
+        const { title, video_id, author } = player.getVideoData();
+        const thumbnail = `http://img.youtube.com/vi/${video_id}/0.jpg`
+        return {
+            duration,
+            title,
+            artist: author,
+            thumbnail
+        }
+    }
+    function getSoundcloudInfo(player) {
+        return new Promise(resolve => {
+            player.getCurrentSound(songData => {
+                if(songData) {
+                    resolve ({
+                        duration: Number((songData.duration) / 1000),
+                        title: songData.title,
+                        artist: songData.user.username,
+                        thumbnail: songData.artwork_url.replace("-large", "-t500x500")
+                    })
+                }
+            })
+        })
+    }
+
+    const { thumbnail, title, artist } = song;
     return (
         <div className={classes.container}>
             <Dialog className={classes.dialog} open={dialog} onClose={handleSetDialog}>
                 <DialogTitle>Edit Song</DialogTitle>
                 <DialogContent>
-                    <img alt="Thumbnail" className={classes.thumbnail} src="https://api.time.com/wp-content/uploads/2019/09/karaoke-mic.jpg?w=800&quality=85" />
-                    <TextField fullWidth margin="dense" name="title" label="Title" />
-                    <TextField fullWidth margin="dense" name="artist" label="Artist" />
-                    <TextField fullWidth margin="dense" name="thumbnail" label="Thumbnail" />
+                    <img alt="Thumbnail" className={classes.thumbnail} src={thumbnail} />
+                    <TextField value={title} fullWidth margin="dense" name="title" label="Title" />
+                    <TextField value={artist} fullWidth margin="dense" name="artist" label="Artist" />
+                    <TextField value={thumbnail} fullWidth margin="dense" name="thumbnail" label="Thumbnail" />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleSetDialog} color="secondary">Cancel</Button>
@@ -72,6 +116,7 @@ function AddSong() {
             <Button disabled={!playable} className={classes.addSongButton} onClick={() => setDialog(true)} variant="contained" color="primary" endIcon={ <AddBoxOutlined /> }>
                 Add
             </Button>
+            <ReactPlayer url={url} hidden onReady={handleEditSong} />
         </div>
     )
 }
