@@ -34,7 +34,7 @@ const DEFAULT_SONG = {
 
 function AddSong() {
     const classes = useStyles();
-    const [addSong] = useMutation(ADD_SONGS);
+    const [addSong, { error }] = useMutation(ADD_SONGS);
     const [dialog, setDialog] = useState(false);
     const [url, setUrl] = useState("");
     const [playable, setPlayable] = useState(false);
@@ -121,6 +121,10 @@ function AddSong() {
         })
     }
 
+    function handleDialogInputError(field) {
+        return error?.graphQLErrors[0]?.extensions?.path.includes(field);
+    }
+
     const { thumbnail, title, artist } = song;
 
     return (
@@ -129,9 +133,18 @@ function AddSong() {
                 <DialogTitle>Edit Song</DialogTitle>
                 <DialogContent>
                     <img alt="Thumbnail" className={classes.thumbnail} src={thumbnail} />
-                    <TextField onChange={handleChangeSong} value={title} fullWidth margin="dense" name="title" label="Title" />
-                    <TextField onChange={handleChangeSong} value={artist} fullWidth margin="dense" name="artist" label="Artist" />
-                    <TextField onChange={handleChangeSong} value={thumbnail} fullWidth margin="dense" name="thumbnail" label="Thumbnail" />
+                    <TextField helperText={handleDialogInputError('title') && 'Fill out field'} 
+                        error={handleDialogInputError('title')} onChange={handleChangeSong} value={title} fullWidth margin="dense" 
+                        name="title" label="Title" 
+                    />
+                    <TextField helperText={handleDialogInputError('artist') && 'Fill out field'} 
+                        error={handleDialogInputError('artist')} onChange={handleChangeSong} value={artist} fullWidth margin="dense" 
+                        name="artist" label="Artist" 
+                    />
+                    <TextField helperText={handleDialogInputError('thumbnail') && 'Fill out field'} 
+                        error={handleDialogInputError('thumbnail')} onChange={handleChangeSong} value={thumbnail} fullWidth margin="dense" 
+                        name="thumbnail" label="Thumbnail" 
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleSetDialog} color="secondary">Cancel</Button>
