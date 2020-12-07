@@ -52,7 +52,7 @@ function SongPlayer() {
 
     useEffect(() => {
         const nextSong = data.queue[positionInQueue + 1]
-        if(played === 1 && nextSong) {
+        if(played >= 0.99 && nextSong) {
             setPlayed(0);
             dispatch({ type: 'SET_SONG', payload: { song: nextSong }})
         }
@@ -80,6 +80,22 @@ function SongPlayer() {
         return new Date(seconds * 1000).toISOString().substring(11, 19);
     }
 
+    function handlePlayNextSong() {
+        const nextSong = data.queue[positionInQueue + 1]
+        if(nextSong) {
+            setPlayed(0);
+            dispatch({ type: 'SET_SONG', payload: { song: nextSong }})
+        }   
+    }
+
+    function handlePlayPreviousSong() {
+        const prevSong = data.queue[positionInQueue - 1]
+        if(prevSong) {
+            setPlayed(0);
+            dispatch({ type: 'SET_SONG', payload: { song: prevSong }})
+        }
+    }
+
     return (
         <div>
             <Card className={classes.container} variant="outlined">
@@ -93,13 +109,13 @@ function SongPlayer() {
                         </Typography>
                     </CardContent>
                     <div className={classes.controls}>
-                        <IconButton>
+                        <IconButton onClick={handlePlayPreviousSong}>
                             <SkipPrevious />
                         </IconButton>
                         <IconButton onClick={handleTogglePlay}>
                             {state.isPlaying? <Pause className={classes.playIcon} /> : <PlayArrow className={classes.playIcon} />}
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={handlePlayNextSong}>
                             <SkipNext />
                         </IconButton>
                         <Typography variant="subtitle1" component="p" color="textSecondary">
