@@ -1,7 +1,7 @@
 import { Card, CardContent, CardMedia, IconButton, makeStyles, Slider, Typography } from '@material-ui/core'
 import { PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons'
 import React from 'react'
-import QueueSongList from '../QueueSongList'
+import QueueSongList from './QueueSongList'
 
 const useStyles = makeStyles(theme => ({
     container: {
