@@ -63,7 +63,11 @@ const useStyles = makeStyles(theme => ({
 
 function Song({ song }) {
     const { id } = song;
-    const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE);
+    const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
+        onCompleted: data => {
+            localStorage.setItem('queue', JSON.stringify(data.addOrRemoveFromQueue))
+        }
+    });
     const classes = useStyles();
     const { state, dispatch } =  useContext(SongContext);
     const { title, artist, thumbnail } = song;
