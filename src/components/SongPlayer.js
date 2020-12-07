@@ -1,5 +1,5 @@
 import { Card, CardContent, CardMedia, IconButton, makeStyles, Slider, Typography } from '@material-ui/core'
-import { PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons'
+import { Pause, PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons'
 import React, { useContext } from 'react'
 import { SongContext } from '../App'
 import QueueSongList from './QueueSongList'
@@ -33,8 +33,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function SongPlayer() {
-    const { state } = useContext(SongContext);
+    const { state, dispatch } = useContext(SongContext);
     const classes = useStyles();
+
+    function handleTogglePlay() {
+        dispatch(state.isPlaying ? { type: 'PAUSE_SONG' } : { type: 'PLAY_SONG' });
+    }
 
     return (
         <div>
@@ -52,8 +56,8 @@ function SongPlayer() {
                         <IconButton>
                             <SkipPrevious />
                         </IconButton>
-                        <IconButton>
-                            <PlayArrow className={classes.playIcon} />
+                        <IconButton onClick={handleTogglePlay}>
+                            {state.isPlaying? <Pause className={classes.playIcon} /> : <PlayArrow className={classes.playIcon} />}
                         </IconButton>
                         <IconButton>
                             <SkipNext />

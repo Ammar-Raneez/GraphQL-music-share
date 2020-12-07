@@ -21,7 +21,7 @@ export const SongContext = createContext({
 
 function App() {
 	const initialSongState = useContext(SongContext);
-	const [state, dispatch] = useReducer(() => songReducer, initialSongState);
+	const [state, dispatch] = useReducer(songReducer, initialSongState);
 	const greaterThanSm = useMediaQuery(theme => theme.breakpoints.up('sm'))
 	const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up('md'))
 
