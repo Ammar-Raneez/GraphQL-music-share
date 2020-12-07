@@ -1,12 +1,12 @@
-import { useQuery } from '@apollo/client';
+import { useSubscription } from '@apollo/client';
 import { Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { PlayArrow, Save } from '@material-ui/icons';
 import React from 'react'
-import { GET_SONGS } from '../graphql/queries';
+import { GET_SONGS } from '../graphql/subscriptions';
 
 function SongList() {
     // let loading = false;
-    const { data, loading, error } = useQuery(GET_SONGS);
+    const { data, loading, error } = useSubscription(GET_SONGS);
 
     // const song = {
     //     title: 'LUNE',
