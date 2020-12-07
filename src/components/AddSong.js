@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, makeStyles, TextField } from '@material-ui/core'
-import { AddBoxOutlined, Link } from '@material-ui/icons'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, TextField } from '@material-ui/core'
+import { AddBoxOutlined } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 //justifies whether a given url is playable
 import ReactPlayer from 'react-player'
@@ -155,13 +155,6 @@ function AddSong() {
             <TextField 
                 className={classes.urlInput} onChange={event => setUrl(event.target.value)} value={url}
                 placeholder="Add YouTube or SoundCloud URL" fullWidth margin="normal" type="url"
-                inputProps={{
-                    startAdornment: (
-                        <InputAdornment>
-                            <Link />
-                        </InputAdornment>
-                    )
-                }}
             />
 
             <Button 
