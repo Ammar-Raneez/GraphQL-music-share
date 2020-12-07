@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Card, CardContent, CardMedia, IconButton, makeStyles, Slider, Typography } from '@material-ui/core'
 import { Pause, PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons'
 import React, { useContext } from 'react'
+import ReactPlayer from 'react-player'
 import { SongContext } from '../App'
 import { GET_QUEUED_SONGS } from '../graphql/queries'
 import QueueSongList from './QueueSongList'
@@ -71,6 +72,7 @@ function SongPlayer() {
                     </div>
                     <Slider type="range" min={0} max={1} step={0.01} />
                 </div>
+                <ReactPlayer hidden url={state.song.url} playing={state.isPlaying} />
                 <CardMedia 
                     className={classes.thumbnail}
                     image={state.song.thumbnail}
