@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Card, CardContent, CardMedia, IconButton, makeStyles, Slider, Typography } from '@material-ui/core'
 import { Pause, PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 import { SongContext } from '../App'
 import { GET_QUEUED_SONGS } from '../graphql/queries'
@@ -42,7 +42,21 @@ function SongPlayer() {
     const [played, setPlayed] = useState(0);
     const [seeking, setSeeking] = useState(false);
     const [playedSeconds, setPlayedSeconds] = useState(0);
+    const [positionInQueue, setPositionInQueue] = useState(0);
     const classes = useStyles();
+
+    useEffect(() => {
+        const songIndex = data.queue.findIndex(song => song.id === state.song.id)
+        setPositionInQueue(songIndex)
+    }, [data.queue, state.song.id])
+
+    useEffect(() => {
+        const nextSong = data.queue[positionInQueue + 1]
+        if(played === 1 && nextSong) {
+            setPlayed(0);
+            dispatch({ type: 'SET_SONG', payload: { song: nextSong }})
+        }
+    }, [data.queue, played, dispatch, positionInQueue])
 
     function handleTogglePlay() {
         dispatch(state.isPlaying ? { type: 'PAUSE_SONG' } : { type: 'PLAY_SONG' });
