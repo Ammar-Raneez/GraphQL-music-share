@@ -1,6 +1,8 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, makeStyles, TextField } from '@material-ui/core'
 import { AddBoxOutlined, Link } from '@material-ui/icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+//justifies whether a given url is playable
+import ReactPlayer from 'react-player'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -24,6 +26,14 @@ const useStyles = makeStyles(theme => ({
 function AddSong() {
     const [dialog, setDialog] = useState(false);
     const classes = useStyles();
+    const [url, setUrl] = useState("");
+    const [playable, setPlayable] = useState(false);
+
+    useEffect(() => {
+        //only valid urls will work
+        const isPlayable = ReactPlayer.canPlay(url);
+        setPlayable(isPlayable);
+    }, [url])
 
     function handleSetDialog() {
         setDialog(false);
@@ -46,6 +56,8 @@ function AddSong() {
             </Dialog>
             <TextField 
                 className={classes.urlInput}
+                onChange={event => setUrl(event.target.value)}
+                value={url}
                 placeholder="Add YouTube or SoundCloud URL"
                 fullWidth margin="normal"
                 type="url"
@@ -57,7 +69,7 @@ function AddSong() {
                     )
                 }}
             />
-            <Button className={classes.addSongButton} onClick={() => setDialog(true)} variant="contained" color="primary" endIcon={ <AddBoxOutlined /> }>
+            <Button disabled={!playable} className={classes.addSongButton} onClick={() => setDialog(true)} variant="contained" color="primary" endIcon={ <AddBoxOutlined /> }>
                 Add
             </Button>
         </div>
